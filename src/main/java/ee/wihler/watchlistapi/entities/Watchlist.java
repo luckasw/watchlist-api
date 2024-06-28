@@ -3,7 +3,7 @@ package ee.wihler.watchlistapi.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
@@ -13,8 +13,8 @@ import java.time.Instant;
 @Table(name = "watchlist")
 public class Watchlist {
     @Id
-    @ColumnDefault("nextval('watchlist_id_seq'")
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -25,8 +25,8 @@ public class Watchlist {
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "created_at")
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
 }
