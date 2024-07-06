@@ -25,6 +25,11 @@ public class MovieServiceImp implements MovieService {
     }
 
     @Override
+    public List<Movie> getMoviesByIds(List<Integer> ids) {
+        return movieRepository.findAllById(ids);
+    }
+
+    @Override
     public void saveMovie(Movie movie) {
         movieRepository.save(movie);
     }

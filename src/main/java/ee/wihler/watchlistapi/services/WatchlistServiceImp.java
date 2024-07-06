@@ -1,5 +1,6 @@
 package ee.wihler.watchlistapi.services;
 
+import ee.wihler.watchlistapi.entities.Movie;
 import ee.wihler.watchlistapi.entities.Watchlist;
 import ee.wihler.watchlistapi.repositories.WatchlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +13,22 @@ public class WatchlistServiceImp implements WatchlistService {
     @Autowired
     private WatchlistRepository watchlistRepository;
 
+    @Autowired
+    private MovieServiceImp movieService;
+
     @Override
-    public List<Integer> getAllUserMovieId(Integer userId) {
-        return watchlistRepository.findAllByUserId(userId);
+    public List<Movie> getAllUserMovieId(Integer userId) {
+        List<Integer> movieIds = watchlistRepository.findAllByUserId(userId);
+        return movieService.getMoviesByIds(movieIds);
     }
 
     @Override
     public void addMovie(Watchlist watchlist) {
-
+        watchlistRepository.save(watchlist);
     }
 
     @Override
     public void deleteMovie(Integer id) {
-
+        watchlistRepository.deleteById(id);
     }
 }
