@@ -1,4 +1,4 @@
-package ee.wihler.watchlistapi.dto;
+package ee.wihler.watchlistapi.dtos;
 
 import lombok.Getter;
 
