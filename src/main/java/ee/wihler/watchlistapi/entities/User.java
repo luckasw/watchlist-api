@@ -7,6 +7,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -33,7 +34,7 @@ public class User {
     @Column(name = "created_at")
     private Instant createdAt;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private Set<Role> roles = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
