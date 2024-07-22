@@ -99,7 +99,10 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
         Set<Role> roles = determineRoles(signUpRequest.getRoles());
-        user.setRoles(roles);
+        for (Role role : roles) {
+            role.getUsers().add(user);
+            user.getRoles().add(role);
+        }
 
         return user;
     }
