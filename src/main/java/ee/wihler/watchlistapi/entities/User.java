@@ -3,9 +3,11 @@ package ee.wihler.watchlistapi.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,7 +16,8 @@ import java.time.Instant;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = false)
+    @ColumnDefault("nextval('users_id_seq'")
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @Column(name = "username", nullable = false)
@@ -26,8 +29,14 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Instant createdAt;
+
+    @ManyToMany(mappedBy = "users")
+    private Set<Role> roles = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Watchlist> watchlists = new LinkedHashSet<>();
 
 }
