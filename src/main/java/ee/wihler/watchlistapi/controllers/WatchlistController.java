@@ -1,6 +1,6 @@
 package ee.wihler.watchlistapi.controllers;
 
-import ee.wihler.watchlistapi.dto.AddWatchlistRequest;
+import ee.wihler.watchlistapi.dtos.AddWatchlistRequest;
 import ee.wihler.watchlistapi.entities.Movie;
 import ee.wihler.watchlistapi.entities.User;
 import ee.wihler.watchlistapi.entities.Watchlist;
