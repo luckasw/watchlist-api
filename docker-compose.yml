@@ -1,5 +1,5 @@
 services:
-  app:
+  watchlist-api:
     build: .
     ports:
       - "8080:8080"
@@ -7,6 +7,8 @@ services:
       - .env
     depends_on:
       - db
+    networks:
+      - watchlist-network
 
   db:
     image: postgres:latest
@@ -16,6 +18,13 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - watchlist-network
 
 volumes:
   postgres_data:
+
+networks:
+    watchlist-network:
+        name: watchlist-network
+        driver: bridge

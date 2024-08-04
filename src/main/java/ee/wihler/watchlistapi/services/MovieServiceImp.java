@@ -2,6 +2,7 @@ package ee.wihler.watchlistapi.services;
 
 import ee.wihler.watchlistapi.entities.Movie;
 import ee.wihler.watchlistapi.repositories.MovieRepository;
+import ee.wihler.watchlistapi.repositories.WatchlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,8 @@ import java.util.Optional;
 public class MovieServiceImp implements MovieService {
     @Autowired
     private MovieRepository movieRepository;
+    @Autowired
+    private WatchlistRepository watchlistRepository;
 
     @Override
     public List<Movie> getAllMovies() {
@@ -30,12 +33,31 @@ public class MovieServiceImp implements MovieService {
     }
 
     @Override
+    public boolean isMovieInWatchlist(Integer movieId, Integer userId) {
+        return watchlistRepository.existsByUserIdAndMovieId(userId, movieId);
+    }
+
+    @Override
     public void saveMovie(Movie movie) {
         movieRepository.save(movie);
     }
 
     @Override
-    public void deleteMovie(Integer id) {
-        movieRepository.deleteById(id);
+    public void deleteMovie(Movie movie) {
+        movieRepository.deleteById(movie.getId());
+    }
+
+    @Override
+    public void updateMovie(Movie movie) {
+        Optional<Movie> existingMovie = movieRepository.findById(movie.getId());
+        if (existingMovie.isPresent()) {
+            Movie updatedMovie = existingMovie.get();
+            updatedMovie.setTitle(movie.getTitle());
+            updatedMovie.setDescription(movie.getDescription());
+            updatedMovie.setReleaseDate(movie.getReleaseDate());
+            movieRepository.save(updatedMovie);
+        } else {
+            // TODO throw exception
+        }
     }
 }

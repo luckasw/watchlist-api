@@ -1,36 +1,73 @@
 package ee.wihler.watchlistapi.controllers;
 
+import ee.wihler.watchlistapi.dtos.ApiResponse;
+import ee.wihler.watchlistapi.dtos.MovieDTO;
 import ee.wihler.watchlistapi.entities.Movie;
 import ee.wihler.watchlistapi.services.MovieServiceImp;
+import ee.wihler.watchlistapi.services.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+// TODO implement ApiResponse for every endpoint
 @RestController
 @RequestMapping("/api/movies")
-public class MovieController {
-    @Autowired
-    private MovieServiceImp movieService;
+    public class MovieController {
+        @Autowired
+        private MovieServiceImp movieService;
 
-    @GetMapping
-    public List<Movie> getAllMovies() {
-        return movieService.getAllMovies();
-    }
+        @Autowired
+        private UserServiceImp userService;
 
-    @GetMapping("/{id}")
-    public Movie getMovieById(@PathVariable Integer id) {
-        return movieService.getMovieById(id);
-    }
+        @GetMapping
+        @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+        public List<MovieDTO> getAllMovies(@RequestHeader("Authorization") String token) {
+            Integer userId = userService.getUserIdFromToken(token);
+            List<Movie> movies = movieService.getAllMovies();
 
-    @PostMapping("/save")
-    public void saveMovie(@RequestBody Movie movie) {
-        movieService.saveMovie(movie);
-    }
+            return movies.stream().map(movie -> {
+                MovieDTO movieDTO = new MovieDTO();
+                movieDTO.setId(movie.getId());
+                movieDTO.setTitle(movie.getTitle());
+                movieDTO.setDescription(movie.getDescription());
+                movieDTO.setReleaseDate(movie.getReleaseDate());
+                movieDTO.setCreatedAt(movie.getCreatedAt());
+                movieDTO.setInWatchlist(movieService.isMovieInWatchlist(movie.getId(), userId));
+                return movieDTO;
+            }).collect(Collectors.toList());
+        }
 
-    @GetMapping("/delete/{id}")
-    public void deleteMovie(@PathVariable Integer id) {
-        movieService.deleteMovie(id);
-    }
+        @GetMapping("/{id}")
+        public Movie getMovieById(@PathVariable Integer id) {
+            return movieService.getMovieById(id);
+        }
 
+        @PostMapping("/save")
+        public ResponseEntity<ApiResponse<?>> saveMovie(@RequestBody Movie movie) {
+            movieService.saveMovie(movie);
+
+            return ResponseEntity.ok(
+                    ApiResponse.builder()
+                            .success(true)
+                            .message("Movie saved successfully")
+                            .data(movie)
+                            .build()
+            );
+        }
+
+        @GetMapping("/delete")
+        @PreAuthorize("hasRole('ROLE_ADMIN')")
+        public void deleteMovie(@RequestBody Movie movie) {
+            movieService.deleteMovie(movie);
+        }
+
+        @GetMapping("/update")
+        @PreAuthorize("hasRole('ROLE_ADMIN')")
+        public void updateMovie(@RequestBody Movie movie) {
+            movieService.updateMovie(movie);
+        }
 }

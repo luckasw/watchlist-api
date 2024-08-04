@@ -5,6 +5,7 @@ import ee.wihler.watchlistapi.services.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+// TODO implement ApiResponse for every endpoint
 @RestController
 @RequestMapping("/api/users")
 public class UserController {

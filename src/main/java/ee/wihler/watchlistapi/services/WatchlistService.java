@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface WatchlistService {
     List<Movie> getAllUserMovieId(Integer userId);
-    void addMovie(Watchlist watchlist);
-    void deleteMovie(Integer id);
+    void addToWatchlist(Watchlist watchlist);
+    void removeFromWatchlist(Integer id);
+
+    Watchlist getWatchlistByUserIdAndMovieId(Integer userId, Integer movieId);
 }

@@ -1,6 +1,5 @@
 package ee.wihler.watchlistapi.controllers;
 
-import ee.wihler.watchlistapi.dtos.AddWatchlistRequest;
 import ee.wihler.watchlistapi.entities.Movie;
 import ee.wihler.watchlistapi.entities.User;
 import ee.wihler.watchlistapi.entities.Watchlist;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// TODO implement ApiResponse for every endpoint
 @RestController
 @RequestMapping("/api/watchlist")
 public class WatchlistController {
@@ -21,29 +21,25 @@ public class WatchlistController {
     @Autowired
     private UserServiceImp userService;
 
-    @Autowired
-    private MovieServiceImp movieService;
-
-    @RequestMapping("/{userId}")
-    public List<Movie> getAllUserMovieId(@PathVariable Integer userId) {
-        return watchlistService.getAllUserMovieId(userId);
+    @GetMapping
+    public List<Movie> getAllUserMovieId(@RequestHeader("Authorization") String token) {
+        return watchlistService.getAllUserMovieId(userService.getUserIdFromToken(token));
     }
 
-    @PostMapping("/add")
-    public void addMovie(@RequestBody AddWatchlistRequest request) {
-        User user = userService.getUserById(request.getUserId());
-        Movie movie = movieService.getMovieById(request.getMovieId());
+    @PostMapping("/update")
+    public void addMovie(@RequestHeader("Authorization") String token, @RequestBody Movie movie) {
+        User user = userService.getUserById(userService.getUserIdFromToken(token));
 
         Watchlist watchlist = new Watchlist();
         watchlist.setUser(user);
         watchlist.setMovie(movie);
 
-        watchlistService.addMovie(watchlist);
-    }
-
-    @GetMapping("/delete/{id}")
-    public void deleteMovie(@PathVariable Integer id) {
-        watchlistService.deleteMovie(id);
+        Watchlist watchlistFromDb = watchlistService.getWatchlistByUserIdAndMovieId(user.getId(), movie.getId());
+        if (watchlistFromDb != null) {
+            watchlistService.removeFromWatchlist(watchlistFromDb.getId());
+        } else {
+            watchlistService.addToWatchlist(watchlist);
+        }
     }
 
 }

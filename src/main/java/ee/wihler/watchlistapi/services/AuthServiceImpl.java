@@ -77,7 +77,6 @@ public class AuthServiceImpl implements AuthService {
 
         SignInResponse signInResponse = SignInResponse.builder()
                 .token(jwt)
-                .id(userDetails.getId())
                 .username(userDetails.getUsername())
                 .email(userDetails.getEmail())
                 .roles(roles)

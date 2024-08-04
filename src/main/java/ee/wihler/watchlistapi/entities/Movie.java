@@ -1,5 +1,6 @@
 package ee.wihler.watchlistapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +35,7 @@ public class Movie {
     @Column(name = "created_at")
     private Instant createdAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "movie")
     private Set<Watchlist> watchlists = new LinkedHashSet<>();
 

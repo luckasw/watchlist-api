@@ -24,7 +24,7 @@ public class AuthController {
         return authService.signUp(signUpRequest);
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<ApiResponse<?>> singInUser(@RequestBody @Valid SignInRequest signInRequest) {
         return authService.signIn(signInRequest);
     }
