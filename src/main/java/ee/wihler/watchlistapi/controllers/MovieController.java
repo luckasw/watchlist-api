@@ -59,13 +59,13 @@ import java.util.stream.Collectors;
             );
         }
 
-        @GetMapping("/delete")
+        @PostMapping("/delete")
         @PreAuthorize("hasRole('ROLE_ADMIN')")
         public void deleteMovie(@RequestBody Movie movie) {
             movieService.deleteMovie(movie);
         }
 
-        @GetMapping("/update")
+        @PostMapping("/update")
         @PreAuthorize("hasRole('ROLE_ADMIN')")
         public void updateMovie(@RequestBody Movie movie) {
             movieService.updateMovie(movie);
