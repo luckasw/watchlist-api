@@ -2,11 +2,13 @@ package ee.wihler.watchlistapi.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -20,15 +22,29 @@ public class Watchlist {
     private Integer id;
 
     @JsonIgnore
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
     @Column(name = "created_at", insertable = false)
     private Instant createdAt;
+
+    @Column(name = "watched", insertable = false)
+    private Boolean watched;
+
+    @Column(name = "watch_date")
+    private LocalDate watchDate;
+
+    @Column(name = "rating")
+    private Integer rating;
+
+    @Column(name = "review", length = Integer.MAX_VALUE)
+    private String review;
 
 }

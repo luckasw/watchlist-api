@@ -19,9 +19,16 @@ id SERIAL PRIMARY KEY,
 user_id INT NOT NULL,
 movie_id INT NOT NULL,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+watched BOOLEAN DEFAULT FALSE,
+watch_date TIMESTAMP,
+rating INT,
+review TEXT,
 FOREIGN KEY (user_id) REFERENCES users(id),
 FOREIGN KEY (movie_id) REFERENCES movies(id)
 );
+
+ALTER TABLE watchlist
+ADD CONSTRAINT rating_check CHECK (rating >= 0 AND rating <= 5 OR rating IS NULL);
 
 CREATE TABLE IF NOT EXISTS roles (
 id SERIAL PRIMARY KEY,
