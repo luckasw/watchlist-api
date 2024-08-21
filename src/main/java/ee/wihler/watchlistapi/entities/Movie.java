@@ -32,7 +32,7 @@ public class Movie {
     private LocalDate releaseDate;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false)
     private Instant createdAt;
 
     @JsonIgnore

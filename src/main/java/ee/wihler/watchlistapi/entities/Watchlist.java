@@ -28,8 +28,7 @@ public class Watchlist {
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false)
     private Instant createdAt;
 
 }

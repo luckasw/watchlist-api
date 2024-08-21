@@ -31,7 +31,7 @@ public class User {
     private String email;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false)
     private Instant createdAt;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
