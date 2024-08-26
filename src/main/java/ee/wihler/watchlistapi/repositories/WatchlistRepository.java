@@ -1,15 +1,16 @@
 package ee.wihler.watchlistapi.repositories;
 
-import ee.wihler.watchlistapi.entities.Watchlist;
+import ee.wihler.watchlistapi.entities.WatchlistMovie;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface WatchlistRepository extends JpaRepository<Watchlist, Integer> {
-    @Query("SELECT w.movie.id FROM Watchlist w WHERE w.user.id = ?1")
-    List<Integer> findAllByUserId(Integer userId);
+public interface WatchlistRepository extends JpaRepository<WatchlistMovie, Integer> {
+    @EntityGraph(attributePaths = {"movie"})
+    List<WatchlistMovie> findByUserId(Integer userId);
 
     boolean existsByUserIdAndMovieId(Integer userId, Integer movieId);
-    Watchlist findByUserIdAndMovieId(Integer userId, Integer movieId);
+    WatchlistMovie findByUserIdAndMovieId(Integer userId, Integer movieId);
 }

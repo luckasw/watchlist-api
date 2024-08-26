@@ -37,6 +37,6 @@ public class Movie {
 
     @JsonIgnore
     @OneToMany(mappedBy = "movie")
-    private Set<Watchlist> watchlists = new LinkedHashSet<>();
+    private Set<WatchlistMovie> watchlistMovies = new LinkedHashSet<>();
 
 }

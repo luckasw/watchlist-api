@@ -14,7 +14,7 @@ release_date DATE NOT NULL,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS watchlist (
+CREATE TABLE IF NOT EXISTS watchlist_movies (
 id SERIAL PRIMARY KEY,
 user_id INT NOT NULL,
 movie_id INT NOT NULL,
@@ -27,7 +27,7 @@ FOREIGN KEY (user_id) REFERENCES users(id),
 FOREIGN KEY (movie_id) REFERENCES movies(id)
 );
 
-ALTER TABLE watchlist
+ALTER TABLE watchlist_movies
 ADD CONSTRAINT rating_check CHECK (rating >= 0 AND rating <= 5 OR rating IS NULL);
 
 CREATE TABLE IF NOT EXISTS roles (

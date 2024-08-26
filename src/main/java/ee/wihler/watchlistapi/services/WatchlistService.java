@@ -1,14 +1,17 @@
 package ee.wihler.watchlistapi.services;
 
-import ee.wihler.watchlistapi.entities.Movie;
-import ee.wihler.watchlistapi.entities.Watchlist;
+import ee.wihler.watchlistapi.dtos.WatchlistMovieDTO;
+import ee.wihler.watchlistapi.entities.WatchlistMovie;
 
 import java.util.List;
 
 public interface WatchlistService {
-    List<Movie> getAllUserMovieId(Integer userId);
-    void addToWatchlist(Watchlist watchlist);
+    List<WatchlistMovieDTO> getAllUserWatchlist(Integer userId);
+
+    void addToWatchlist(WatchlistMovie watchlistMovie);
     void removeFromWatchlist(Integer id);
 
-    Watchlist getWatchlistByUserIdAndMovieId(Integer userId, Integer movieId);
+    WatchlistMovie getWatchlistByUserIdAndMovieId(Integer userId, Integer movieId);
+
+    void setWatched(WatchlistMovie watchlistMovie);
 }

@@ -22,23 +22,24 @@ public class WatchlistController {
     private UserServiceImp userService;
 
     @GetMapping
-    public List<Movie> getAllUserMovieId(@RequestHeader("Authorization") String token) {
-        return watchlistService.getAllUserMovieId(userService.getUserIdFromToken(token));
+    public List<WatchlistMovieDTO> getUserWatchlist(@RequestHeader("Authorization") String token) {
+        log.debug("Getting user watchlist");
+        return watchlistService.getAllUserWatchlist(userService.getUserIdFromToken(token));
     }
 
     @PostMapping("/update")
     public void addMovie(@RequestHeader("Authorization") String token, @RequestBody Movie movie) {
         User user = userService.getUserById(userService.getUserIdFromToken(token));
 
-        Watchlist watchlist = new Watchlist();
-        watchlist.setUser(user);
-        watchlist.setMovie(movie);
+        WatchlistMovie watchlistMovie = new WatchlistMovie();
+        watchlistMovie.setUser(user);
+        watchlistMovie.setMovie(movie);
 
-        Watchlist watchlistFromDb = watchlistService.getWatchlistByUserIdAndMovieId(user.getId(), movie.getId());
-        if (watchlistFromDb != null) {
-            watchlistService.removeFromWatchlist(watchlistFromDb.getId());
+        WatchlistMovie watchlistMovieFromDb = watchlistService.getWatchlistByUserIdAndMovieId(user.getId(), movie.getId());
+        if (watchlistMovieFromDb != null) {
+            watchlistService.removeFromWatchlist(watchlistMovieFromDb.getId());
         } else {
-            watchlistService.addToWatchlist(watchlist);
+            watchlistService.addToWatchlist(watchlistMovie);
         }
     }
 

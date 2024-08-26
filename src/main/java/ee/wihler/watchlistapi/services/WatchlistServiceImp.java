@@ -21,16 +21,24 @@ public class WatchlistServiceImp implements WatchlistService {
     private MovieServiceImp movieService;
 
     @Override
-    public List<Movie> getAllUserMovieId(Integer userId) {
-        log.debug("Getting all movie ids for user: " + userId);
-        List<Integer> movieIds = watchlistRepository.findAllByUserId(userId);
-        log.debug("Movie ids found: " + movieIds.toString());
-        return movieService.getMoviesByIds(movieIds);
+    public List<WatchlistMovieDTO> getAllUserWatchlist(Integer userId) {
+        List<WatchlistMovie> watchlistMovies = watchlistRepository.findByUserId(userId);
+        return watchlistMovies.stream()
+                .map(watchlistMovie -> new WatchlistMovieDTO(
+                        watchlistMovie.getId(),
+                        watchlistMovie.getMovie(),
+                        watchlistMovie.getWatched(),
+                        watchlistMovie.getWatchDate(),
+                        watchlistMovie.getRating(),
+                        watchlistMovie.getReview(),
+                        watchlistMovie.getCreatedAt()
+                ))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void addToWatchlist(Watchlist watchlist) {
-        watchlistRepository.save(watchlist);
+    public void addToWatchlist(WatchlistMovie watchlistMovie) {
+        watchlistRepository.save(watchlistMovie);
     }
 
     @Override
@@ -39,7 +47,7 @@ public class WatchlistServiceImp implements WatchlistService {
     }
 
     @Override
-    public Watchlist getWatchlistByUserIdAndMovieId(Integer userId, Integer movieId) {
+    public WatchlistMovie getWatchlistByUserIdAndMovieId(Integer userId, Integer movieId) {
         return watchlistRepository.findByUserIdAndMovieId(userId, movieId);
     }
 }

@@ -7,7 +7,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -38,6 +37,6 @@ public class User {
     private Set<Role> roles = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<Watchlist> watchlists = new LinkedHashSet<>();
+    private Set<WatchlistMovie> watchlistMovies = new LinkedHashSet<>();
 
 }

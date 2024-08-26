@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -13,8 +14,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "watchlist")
-public class Watchlist {
+@Table(name = "watchlist_movies")
+public class WatchlistMovie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('watchlist_id_seq'")
