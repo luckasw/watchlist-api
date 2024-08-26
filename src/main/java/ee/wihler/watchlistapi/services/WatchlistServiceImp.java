@@ -1,15 +1,15 @@
 package ee.wihler.watchlistapi.services;
 
-import ee.wihler.watchlistapi.entities.Movie;
-import ee.wihler.watchlistapi.entities.Watchlist;
+import ee.wihler.watchlistapi.dtos.WatchlistMovieDTO;
+import ee.wihler.watchlistapi.entities.WatchlistMovie;
 import ee.wihler.watchlistapi.repositories.WatchlistRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WatchlistServiceImp implements WatchlistService {
@@ -49,5 +49,17 @@ public class WatchlistServiceImp implements WatchlistService {
     @Override
     public WatchlistMovie getWatchlistByUserIdAndMovieId(Integer userId, Integer movieId) {
         return watchlistRepository.findByUserIdAndMovieId(userId, movieId);
+    }
+
+    @Override
+    public void setWatched(WatchlistMovie watchlistMovie) {
+        log.debug("Request to set watched: " + watchlistMovie.getId());
+        WatchlistMovie watchlistMovieFromDb = watchlistRepository.findById(watchlistMovie.getId()).orElse(null);
+        log.debug("Watchlist from db: " + watchlistMovieFromDb);
+        if (watchlistMovieFromDb == null || !watchlistMovieFromDb.getWatched()) {
+            watchlistRepository.save(watchlistMovie);
+        } else {
+            watchlistRepository.deleteById(watchlistMovie.getId());
+        }
     }
 }
